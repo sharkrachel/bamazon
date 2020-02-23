@@ -52,3 +52,9 @@ function products() {
         console.table(res);
     })
 }
+
+function lowInventory() {
+    connection.query("SELECT * FROM products WHERE stock_quantity < 5", function(err, res) {
+        console.table(res);
+    })
+}
