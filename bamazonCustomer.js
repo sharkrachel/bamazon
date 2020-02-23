@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var consoleTable = require("console.table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -18,11 +19,12 @@ connection.connect(function (err) {
 // here is where the inquirer prompt may start...
 
 function showItems() {
-    connection.query("SELECT * FROM products", function (err, res) {
+    connection.query("SELECT item_id, product_name, price FROM products", function (err, res) {
         if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-            console.log("Item ID: " + res[i].item_id + "\n" + "Product Name: " + res[i].product_name + "\n" + "Price: " + res[i].price + "\n-------------------------");
-        }
+        console.table(res)
+        // for (var i = 0; i < res.length; i++) {
+        //     console.log("Item ID: " + res[i].item_id + "\n" + "Product Name: " + res[i].product_name + "\n" + "Price: " + res[i].price + "\n-------------------------");
+        // }
         orderItemsPrompt();
     });
 }
@@ -58,10 +60,14 @@ function processOrder(id, amount) {
             console.log("Processing your oder...");
             console.log("You owe: " + amountOwed);
             
-            connection.query("UPDATE products SET stock_quantity = stock_quantity -" + amount + "WHERE item_id = " + id);
+          var statement =  connection.query("UPDATE products SET stock_quantity = stock_quantity -" + amount + " WHERE item_id = " + id, function(err, res){
+
+          });
+
+          console.log(statement.sql);
         }
         else {
             console.log("Out of Stock");
         }
-    })
+    });
 }
