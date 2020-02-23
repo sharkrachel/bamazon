@@ -35,13 +35,13 @@ function orderItemsPrompt() {
             name: "productSelection",
             type: "input",
             message: "Please enter the item number for the product you'd like to purchase",
-            filter:Number
+            filter: Number
         },
         {
             name: "productSelectionQuantity",
             type: "input",
             message: "How many would you like to purchase?",
-            filter:Number
+            filter: Number
         }
 
     ]).then(function (answer) {
@@ -53,18 +53,19 @@ function orderItemsPrompt() {
 }
 
 function processOrder(id, amount) {
-    connection.query("SELECT * FROM products WHERE item_id = " + id, function(err, res) {
+    connection.query("SELECT * FROM products WHERE item_id = " + id, function (err, res) {
         if (err) throw err;
         if (amount <= res[0].stock_quantity) {
             var amountOwed = res[0].price * amount;
             console.log("Processing your oder...");
             console.log("You owe: " + amountOwed);
-            
-          var statement =  connection.query("UPDATE products SET stock_quantity = stock_quantity -" + amount + " WHERE item_id = " + id, function(err, res){
 
-          });
+            // var statment = 
+            connection.query("UPDATE products SET stock_quantity = stock_quantity -" + amount + " WHERE item_id = " + id, function (err, res) {
 
-          console.log(statement.sql);
+            });
+
+            //   console.log(statement.sql);
         }
         else {
             console.log("Out of Stock");
