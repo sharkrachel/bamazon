@@ -10,3 +10,4 @@ These two programs were made using MySQL database, Node.js and JavaScript.
 ## Show me!
 Below are deomonstrations of the two different programs. 
 
+[bamazonCustomer DEMO](https://github.com/sharkrachel/bamazon/blob/master/bamazonCustomer.mov?raw=true)
