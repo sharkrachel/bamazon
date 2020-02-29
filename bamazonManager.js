@@ -21,7 +21,7 @@ function managerMenu() {
         {
             type: "list",
             message: "Select Option",
-            choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product"
+            choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "Exit"
             ],
             name: "menu"
         }
@@ -43,38 +43,43 @@ function managerMenu() {
             case "Add New Product":
                 addProduct();
                 break;
+
+            case "Exit":
+                connection.end();
+                return;
+
         }
     })
 }
 
 function products() {
-    connection.query("SELECT item_id, product_name, price, stock_quantity FROM products", function(err, res) {
+    connection.query("SELECT item_id, product_name, price, stock_quantity FROM products", function (err, res) {
         console.table(res);
         managerMenu()
     })
 }
 
 function lowInventory() {
-    connection.query("SELECT * FROM products WHERE stock_quantity < 5", function(err, res) {
+    connection.query("SELECT * FROM products WHERE stock_quantity < 5", function (err, res) {
         console.table(res);
         managerMenu()
     });
 }
 
 function itemLookUp() {
-    return new Promise(function(resolve, reject) {
-        connection.query("SELECT item_id, product_name FROM products", function(err, res){
+    return new Promise(function (resolve, reject) {
+        connection.query("SELECT item_id, product_name FROM products", function (err, res) {
             resolve(res);
         })
-    })  
+    })
 }
 
 function addInventory() {
 
     //original - [{product_name:"dogbrush"},{product_name:"couch"}]
     //transformed array according to return  -["5 - dogbrush"," 7 couch"]
-    itemLookUp().then(function(res) {
-        var listProducts = res.map(function(res){
+    itemLookUp().then(function (res) {
+        var listProducts = res.map(function (res) {
             return res.item_id + " - " + res.product_name;
         })
         inquirer.prompt([
@@ -89,13 +94,13 @@ function addInventory() {
                 message: "Quantity?",
                 name: "quantity"
             }
-        ]).then(function(input) {
-               var item_id = input.productList.split(" - ")[0]
+        ]).then(function (input) {
+            var item_id = input.productList.split(" - ")[0]
 
-               connection.query("UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?", [input.quantity, item_id], function(err, res){
+            connection.query("UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?", [input.quantity, item_id], function (err, res) {
                 products();
-               })
-               
+            })
+
         })
     })
 }
@@ -109,25 +114,25 @@ function addProduct() {
         },
 
         {
-            type: "input", 
+            type: "input",
             message: "What department is the product from?",
             name: "productDepartment"
         },
 
         {
-            type: "input", 
+            type: "input",
             message: "Quantity?",
             name: "productQuantity"
         },
 
         {
-            type: "input", 
+            type: "input",
             message: "Price?",
             name: "productPrice"
         }
 
-    ]).then(function(input){
-        connection.query("INSERT INTO products (product_name, department_name, price, stock_quantity)VALUES (?, ?, ?, ?)", [input.productName, input.productDepartment, input.productPrice, input.productQuantity], function(err, res) {
+    ]).then(function (input) {
+        connection.query("INSERT INTO products (product_name, department_name, price, stock_quantity)VALUES (?, ?, ?, ?)", [input.productName, input.productDepartment, input.productPrice, input.productQuantity], function (err, res) {
             products();
         })
     })

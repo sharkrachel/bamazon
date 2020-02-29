@@ -62,13 +62,15 @@ function processOrder(id, amount) {
 
             // var statment = 
             connection.query("UPDATE products SET stock_quantity = stock_quantity -" + amount + " WHERE item_id = " + id, function (err, res) {
-
+            showItems();
+ 
             });
 
             //   console.log(statement.sql);
         }
         else {
             console.log("Out of Stock");
+            showItems();
         }
     });
 }
