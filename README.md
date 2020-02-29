@@ -11,4 +11,6 @@ These two programs were made using MySQL database, Node.js and JavaScript.
 Below are deomonstrations of the two different programs. 
 
 [bamazonCustomer DEMO](https://github.com/sharkrachel/bamazon/blob/master/bamazonCustomer.mov?raw=true)
+
+
 [bamazonManager DEMO](https://github.com/sharkrachel/bamazon/blob/master/bamazonManager.mov?raw=true)
